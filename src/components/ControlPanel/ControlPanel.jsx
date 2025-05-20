@@ -83,7 +83,7 @@ function ControlPanel({ canvasRef }) {
             {ERROR_CORRECTION_OPTIONS.map((option) => {
               const id = `err-correction-${option}`;
               return (
-                <div className={styles.errorCorrectionRadioButton}>
+                <div key={id} className={styles.errorCorrectionRadioButton}>
                   <input
                     className={styles.errorCorrectionRadio}
                     id={id}
