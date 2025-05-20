@@ -1,0 +1,70 @@
+.controlPanelWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: var(--shadow-elevation-low);
+}
+
+.label {
+  margin-bottom: 4%;
+  padding: 2%;
+  font-weight: 500;
+}
+
+.textArea {
+  border-radius: 8px;
+  padding: 5px;
+}
+
+.colourPicker {
+  width: 100%;
+  border-radius: 8px;
+  border: 0;
+  padding: 0;
+}
+
+.slider {
+  background-color: hotpink;
+}
+
+.errorCorrectionRadioList {
+  display: flex;
+  gap: 6px;
+  padding: 0;
+}
+
+.errorCorrectionRadioButton {
+  display: flex;
+  flex: 1;
+}
+
+.errorCorrectionRadio {
+  opacity: 0;
+  position: absolute;
+}
+
+.errorCorrectionRadioLabel {
+  display: flex;
+  height: 4rem;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  border: solid 3px #acacac;
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.errorCorrectionRadio:checked + .errorCorrectionRadioLabel {
+  border-color: #5a5a5a;
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-elevation-medium);
+}
