@@ -1,0 +1,8 @@
+.Card {
+  display: flex;
+  align-items: center;
+  border-radius: 16px;
+  padding: 5%;
+  background-color: var(--color-light-blue);
+  flex-shrink: 0;
+}
