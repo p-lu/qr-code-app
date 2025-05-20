@@ -1,0 +1,21 @@
+.header {
+  margin: 2%;
+  text-align: center;
+}
+
+.qrGenerator {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.qrWrapper {
+  box-sizing: content-box;
+  width: 500px;
+}
+
+.qrCanvas {
+  margin: auto;
+  border-radius: 16px;
+}
