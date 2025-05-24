@@ -1,0 +1,26 @@
+.hue {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 200px;
+  height: 20px;
+  background: linear-gradient(
+    90deg,
+    hsl(0, 100%, 50%),
+    hsl(60, 100%, 50%),
+    hsl(120, 100%, 50%),
+    hsl(180, 100%, 50%),
+    hsl(240, 100%, 50%),
+    hsl(300, 100%, 50%),
+    hsl(360, 100%, 50%)
+  );
+}
+
+.pointer {
+  position: relative;
+  transform: translate(-50%, 0);
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border: 2px solid black;
+}

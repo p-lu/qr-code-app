@@ -2,7 +2,6 @@
   position: relative;
   width: 200px;
   height: 200px;
-  background-color: red;
   margin-bottom: 20px;
 }
 
@@ -14,11 +13,4 @@
   border-radius: 50%;
   border: 2px solid #000;
   background-color: transparent;
-}
-
-.dot {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  background-color: green;
 }

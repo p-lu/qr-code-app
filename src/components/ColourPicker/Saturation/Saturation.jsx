@@ -2,7 +2,7 @@ import React from "react";
 
 import styles from "./Saturation.module.css";
 
-function Saturation({ ref, position, setPosition }) {
+function Saturation({ ref, position, setPosition, hue }) {
   const [dragging, setDragging] = React.useState(false);
 
   React.useEffect(() => {
@@ -59,12 +59,17 @@ function Saturation({ ref, position, setPosition }) {
   };
 
   return (
-    <div className={styles.saturation} onMouseDown={onMouseDown}>
+    <div
+      className={styles.saturation}
+      onMouseDown={onMouseDown}
+      style={{
+        background: `linear-gradient(to top, #000, rgba(0, 0, 0, 0)), linear-gradient(to right, #fff, hsl(${hue}, 100%, 50%))`,
+      }}
+    >
       <div
         ref={ref}
         style={{ position: "absolute", left: position.x, top: position.y }}
       >
-        <div className={styles.dot} />
         <button className={styles.pointer} />
       </div>
     </div>
