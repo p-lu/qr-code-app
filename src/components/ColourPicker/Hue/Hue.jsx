@@ -15,7 +15,10 @@ function Hue({ hue, setHue }) {
 
   React.useEffect(() => {
     const onMouseMove = (e) => {
-      if (!dragging) return;
+      if (!dragging || !ref.current) return;
+      e.stopPropagation();
+      e.preventDefault();
+
       let x = e.clientX;
       const hueBar = ref.current.getBoundingClientRect();
       x = Math.max(hueBar.left, Math.min(x, hueBar.right));

@@ -2,8 +2,20 @@ import React from "react";
 
 import styles from "./Saturation.module.css";
 
-function Saturation({ ref, position, setPosition, hue }) {
+function Saturation({ setSaturation, hue }) {
+  const ref = React.useRef();
   const [dragging, setDragging] = React.useState(false);
+  const [position, setPosition] = React.useState({ x: 0, y: 0 });
+
+  React.useEffect(() => {
+    const boundingRect = ref.current.getBoundingClientRect();
+    const { x, y } = position;
+    const s = Math.floor(((x + 1) / boundingRect.width) * 100);
+    const v = Math.ceil(
+      ((boundingRect.height - (y + 1)) / boundingRect.height) * 100
+    );
+    setSaturation({ s, v });
+  }, [position, setSaturation]);
 
   React.useEffect(() => {
     const onMouseUp = (e) => {
@@ -14,24 +26,20 @@ function Saturation({ ref, position, setPosition, hue }) {
 
     const onMouseMove = (e) => {
       if (!dragging || !ref.current) return;
+      e.stopPropagation();
+      e.preventDefault();
 
-      const { parentElement, offsetParent, offsetWidth, offsetHeight } =
-        ref.current;
-      const parentRect = parentElement.getBoundingClientRect();
-      const offsetParentRect = offsetParent.getBoundingClientRect();
-      const elemWidth = offsetWidth || 1;
-      const elemHeight = offsetHeight || 1;
+      const boundingRect = ref.current.getBoundingClientRect();
 
       let x = e.clientX;
       let y = e.clientY;
 
-      // Clamp within parent bounds
-      x = Math.max(parentRect.left, Math.min(x, parentRect.right - elemWidth));
-      y = Math.max(parentRect.top, Math.min(y, parentRect.bottom - elemHeight));
+      // Clamp within bounds
+      x = Math.max(boundingRect.left, Math.min(x, boundingRect.right));
+      y = Math.max(boundingRect.top, Math.min(y, boundingRect.bottom));
 
-      // Adjust for offsetParent
-      x -= offsetParentRect.left;
-      y -= offsetParentRect.top;
+      x -= boundingRect.left;
+      y -= boundingRect.top;
 
       setPosition({ x, y });
     };
@@ -47,10 +55,10 @@ function Saturation({ ref, position, setPosition, hue }) {
 
   const onMouseDown = (e) => {
     if (e.button !== 0) return;
-    var pos = ref.current.parentElement.getBoundingClientRect();
+    const boundingRect = ref.current.getBoundingClientRect();
     const rel = {
-      x: e.clientX - pos.left,
-      y: e.clientY - pos.top,
+      x: e.clientX - boundingRect.left,
+      y: e.clientY - boundingRect.top,
     };
     setPosition(rel);
     setDragging(true);
@@ -60,18 +68,17 @@ function Saturation({ ref, position, setPosition, hue }) {
 
   return (
     <div
+      ref={ref}
       className={styles.saturation}
       onMouseDown={onMouseDown}
       style={{
         background: `linear-gradient(to top, #000, rgba(0, 0, 0, 0)), linear-gradient(to right, #fff, hsl(${hue}, 100%, 50%))`,
       }}
     >
-      <div
-        ref={ref}
+      <button
+        className={styles.pointer}
         style={{ position: "absolute", left: position.x, top: position.y }}
-      >
-        <button className={styles.pointer} />
-      </div>
+      />
     </div>
   );
 }
