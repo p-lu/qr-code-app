@@ -18,51 +18,75 @@ function Saturation({ setSaturation, hue }) {
   }, [position, setSaturation]);
 
   React.useEffect(() => {
-    const onMouseUp = (e) => {
+    const onEnd = (e) => {
       setDragging(false);
-      e.stopPropagation();
       e.preventDefault();
     };
 
-    const onMouseMove = (e) => {
+    const onMove = (clientX, clientY) => {
       if (!dragging || !ref.current) return;
-      e.stopPropagation();
-      e.preventDefault();
-
       const boundingRect = ref.current.getBoundingClientRect();
 
-      let x = e.clientX;
-      let y = e.clientY;
-
       // Clamp within bounds
-      x = Math.max(boundingRect.left, Math.min(x, boundingRect.right));
-      y = Math.max(boundingRect.top, Math.min(y, boundingRect.bottom));
+      let x = Math.max(
+        boundingRect.left,
+        Math.min(clientX, boundingRect.right)
+      );
+      let y = Math.max(
+        boundingRect.top,
+        Math.min(clientY, boundingRect.bottom)
+      );
 
+      // Adjust to local coordinates
       x -= boundingRect.left;
       y -= boundingRect.top;
 
       setPosition({ x, y });
     };
 
+    const onMouseMove = (e) => {
+      onMove(e.clientX, e.clientY);
+      e.preventDefault();
+    };
+
+    const onTouchMove = (e) => {
+      if (e.touches.length !== 1) return;
+      const touch = e.touches[0];
+      onMove(touch.clientX, touch.clientY);
+      e.preventDefault();
+    };
+
     document.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseup", onMouseUp);
+    document.addEventListener("mouseup", onEnd);
+    document.addEventListener("touchmove", onTouchMove);
+    document.addEventListener("touchend", onEnd);
 
     return () => {
       document.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseup", onMouseUp);
+      document.removeEventListener("mouseup", onEnd);
+      document.removeEventListener("touchmove", onTouchMove);
+      document.removeEventListener("touchend", onEnd);
     };
   }, [ref, dragging, setPosition]);
 
+  const handleStart = (clientX, clientY) => {
+    const boundingRect = ref.current.getBoundingClientRect();
+    const x = clientX - boundingRect.left;
+    const y = clientY - boundingRect.top;
+    setPosition({ x, y });
+    setDragging(true);
+  };
+
   const onMouseDown = (e) => {
     if (e.button !== 0) return;
-    const boundingRect = ref.current.getBoundingClientRect();
-    const rel = {
-      x: e.clientX - boundingRect.left,
-      y: e.clientY - boundingRect.top,
-    };
-    setPosition(rel);
-    setDragging(true);
-    e.stopPropagation();
+    handleStart(e.clientX, e.clientY);
+    e.preventDefault();
+  };
+
+  const onTouchStart = (e) => {
+    if (e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    handleStart(touch.clientX, touch.clientY);
     e.preventDefault();
   };
 
@@ -71,6 +95,7 @@ function Saturation({ setSaturation, hue }) {
       ref={ref}
       className={styles.saturation}
       onMouseDown={onMouseDown}
+      onTouchStart={onTouchStart}
       style={{
         background: `linear-gradient(to top, #000, rgba(0, 0, 0, 0)), linear-gradient(to right, #fff, hsl(${hue}, 100%, 50%))`,
       }}

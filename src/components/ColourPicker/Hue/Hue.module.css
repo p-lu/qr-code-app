@@ -15,6 +15,7 @@
     hsl(300, 100%, 50%),
     hsl(360, 100%, 50%)
   );
+  touch-action: none;
 }
 
 .pointer {
