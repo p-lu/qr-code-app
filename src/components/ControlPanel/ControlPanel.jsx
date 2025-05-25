@@ -4,6 +4,8 @@ import styles from "./ControlPanel.module.css";
 
 import QRCode from "qrcode";
 import Card from "../Card/Card";
+import ColourPicker from "../ColourPicker";
+import { useOnClickOutside } from "../../hooks/useOnClickOutside";
 
 function ControlPanel({ canvasRef }) {
   const ERROR_CORRECTION_OPTIONS = ["Low", "Medium", "Quartile", "High"];
@@ -14,6 +16,10 @@ function ControlPanel({ canvasRef }) {
   const [errorCorrection, setErrorCorrection] = React.useState(
     ERROR_CORRECTION_OPTIONS[0]
   );
+
+  const [showColourPicker, setShowColourPicker] = React.useState(false);
+  const colourPickerRef = React.useRef();
+  useOnClickOutside(colourPickerRef, () => setShowColourPicker(false));
 
   const generateQRCode = () => {
     QRCode.toCanvas(canvasRef.current, message, {
@@ -76,6 +82,17 @@ function ControlPanel({ canvasRef }) {
               setColour(e.target.value);
             }}
           />
+          <button
+            className={styles.colourSwatch}
+            style={{ backgroundColor: colour }}
+            id="colour"
+            onClick={() => setShowColourPicker(!showColourPicker)}
+          />
+          {showColourPicker && (
+            <div ref={colourPickerRef} className={styles.colourPickerWrapper}>
+              <ColourPicker setColour={setColour} />
+            </div>
+          )}
         </div>
         <div className={styles.row}>
           <div className={styles.label}>Error Correction Level</div>

@@ -32,9 +32,9 @@ function QRGenerator() {
             <canvas className={styles.qrCanvas} ref={qrCanvasRef} />
           </div>
         </Card>
-        <Card>
+        {/* <Card>
           <ColourPicker />
-        </Card>
+        </Card> */}
       </div>
     </>
   );

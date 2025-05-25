@@ -82,6 +82,8 @@ html {
   --color-background: var(--color-light-blue);
   --color-accent: var(--color-blue);
 
+  --inset-white: inset 0 0 0 2px #fff;
+
   --shadow-color: 0deg 0% 63%;
   /* prettier-ignore */
   --shadow-elevation-low:
