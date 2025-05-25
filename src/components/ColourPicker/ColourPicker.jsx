@@ -17,7 +17,7 @@ function ColourPicker() {
   }, [saturation, hue]);
 
   return (
-    <div>
+    <div className={styles.colourPicker}>
       {`RGB: ${JSON.stringify(rgb)}`}
       <br />
       {`HEX: ${rgbToHex(rgb.r, rgb.g, rgb.b)}`}
