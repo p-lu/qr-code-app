@@ -3,7 +3,6 @@ import React from "react";
 import styles from "./QRGenerator.module.css";
 import ControlPanel from "../ControlPanel";
 import Card from "../Card";
-import ColourPicker from "../ColourPicker";
 
 function QRGenerator() {
   const qrCanvasRef = React.useRef();
@@ -32,9 +31,6 @@ function QRGenerator() {
             <canvas className={styles.qrCanvas} ref={qrCanvasRef} />
           </div>
         </Card>
-        {/* <Card>
-          <ColourPicker />
-        </Card> */}
       </div>
     </>
   );

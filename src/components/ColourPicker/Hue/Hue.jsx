@@ -7,11 +7,20 @@ function Hue({ hue, setHue }) {
   const [position, setPosition] = React.useState(0);
   const [dragging, setDragging] = React.useState(false);
 
-  React.useEffect(() => {
+  const hueToPosition = (hue) => {
     const width = ref.current.getBoundingClientRect().width;
-    const hue = Math.round((position / width) * 360);
-    setHue(hue);
-  }, [position, setHue]);
+    return (hue / 360) * width;
+  };
+
+  const positionToHue = (pos) => {
+    const width = ref.current.getBoundingClientRect().width;
+    return Math.round((pos / width) * 360);
+  };
+
+  React.useEffect(() => {
+    const pos = hueToPosition(hue);
+    setPosition(pos);
+  }, [hue]);
 
   React.useEffect(() => {
     const onMove = (clientX) => {
@@ -21,7 +30,8 @@ function Hue({ hue, setHue }) {
       const hueBar = ref.current.getBoundingClientRect();
       x = Math.max(hueBar.left, Math.min(x, hueBar.right));
       x -= hueBar.left;
-      setPosition(x);
+      const hue = positionToHue(x);
+      setHue(hue);
     };
     const onMouseMove = (e) => {
       onMove(e.clientX);
@@ -49,10 +59,12 @@ function Hue({ hue, setHue }) {
       document.removeEventListener("touchmove", onTouchMove);
       document.removeEventListener("touchend", onEnd);
     };
-  }, [dragging]);
+  }, [dragging, setHue]);
 
   const handleStart = (clientX) => {
-    setPosition(clientX - ref.current.getBoundingClientRect().left);
+    const pos = clientX - ref.current.getBoundingClientRect().left;
+    const hue = positionToHue(pos);
+    setHue(hue);
     setDragging(true);
   };
 

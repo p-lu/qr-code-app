@@ -1,26 +1,30 @@
 import React from "react";
 
 import styles from "./ColourPicker.module.css";
-import { hsvToRgb, rgbToHex } from "./colourUtils";
+import { hexToHsv, hsvToHex } from "./colourUtils";
 import Saturation from "./Saturation";
 import Hue from "./Hue/Hue";
 
-function ColourPicker({ setColour }) {
-  const [saturation, setSaturation] = React.useState({ s: 0, v: 0 });
-  const [hue, setHue] = React.useState(0);
+function ColourPicker({ colour, setColour }) {
+  const { h, s, v } = hexToHsv(colour);
 
-  React.useEffect(() => {
-    const { s, v } = saturation;
-    const h = hue;
-    const rgb = hsvToRgb(h, s, v);
-    const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
-    setColour(hex);
-  }, [saturation, hue, setColour]);
+  const handleSaturationChange = (saturation) => {
+    const sat = saturation.s;
+    const val = saturation.v;
+    setColour(hsvToHex(h, sat, val));
+  };
+  const handleHueChange = (hue) => {
+    setColour(hsvToHex(hue, s, v));
+  };
 
   return (
     <div className={styles.colourPicker}>
-      <Saturation setSaturation={setSaturation} hue={hue} />
-      <Hue hue={hue} setHue={setHue} />
+      <Saturation
+        saturation={{ s, v }}
+        setSaturation={handleSaturationChange}
+        hue={h}
+      />
+      <Hue hue={h} setHue={handleHueChange} />
     </div>
   );
 }

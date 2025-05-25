@@ -73,15 +73,6 @@ function ControlPanel({ canvasRef }) {
           <label className={styles.label} htmlFor="colour">
             Colour
           </label>
-          <input
-            id="colour"
-            className={styles.colourPicker}
-            type="color"
-            value={colour}
-            onChange={(e) => {
-              setColour(e.target.value);
-            }}
-          />
           <button
             className={styles.colourSwatch}
             style={{ backgroundColor: colour }}
@@ -90,7 +81,7 @@ function ControlPanel({ canvasRef }) {
           />
           {showColourPicker && (
             <div ref={colourPickerRef} className={styles.colourPickerWrapper}>
-              <ColourPicker setColour={setColour} />
+              <ColourPicker colour={colour} setColour={setColour} />
             </div>
           )}
         </div>

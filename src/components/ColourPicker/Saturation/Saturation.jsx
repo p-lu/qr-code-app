@@ -2,20 +2,34 @@ import React from "react";
 
 import styles from "./Saturation.module.css";
 
-function Saturation({ setSaturation, hue }) {
+function Saturation({ saturation, setSaturation, hue }) {
   const ref = React.useRef();
   const [dragging, setDragging] = React.useState(false);
   const [position, setPosition] = React.useState({ x: 0, y: 0 });
 
-  React.useEffect(() => {
-    const boundingRect = ref.current.getBoundingClientRect();
-    const { x, y } = position;
+  const saturationToPosition = (s, v, boundingRect) => {
+    const x = boundingRect.width * (s / 100);
+    const y = boundingRect.height * ((100 - v) / 100);
+    return { x, y };
+  };
+
+  const positionToSaturation = (x, y, boundingRect) => {
     const s = Math.floor(((x + 1) / boundingRect.width) * 100);
     const v = Math.ceil(
       ((boundingRect.height - (y + 1)) / boundingRect.height) * 100
     );
-    setSaturation({ s, v });
-  }, [position, setSaturation]);
+    return { s, v };
+  };
+
+  React.useEffect(() => {
+    const boundingRect = ref.current.getBoundingClientRect();
+    const newPosition = saturationToPosition(
+      saturation.s,
+      saturation.v,
+      boundingRect
+    );
+    setPosition(newPosition);
+  }, [saturation]);
 
   React.useEffect(() => {
     const onEnd = (e) => {
@@ -41,7 +55,8 @@ function Saturation({ setSaturation, hue }) {
       x -= boundingRect.left;
       y -= boundingRect.top;
 
-      setPosition({ x, y });
+      const newSaturation = positionToSaturation(x, y, boundingRect);
+      setSaturation(newSaturation);
     };
 
     const onMouseMove = (e) => {
@@ -67,13 +82,15 @@ function Saturation({ setSaturation, hue }) {
       document.removeEventListener("touchmove", onTouchMove);
       document.removeEventListener("touchend", onEnd);
     };
-  }, [ref, dragging, setPosition]);
+  }, [ref, dragging, setPosition, setSaturation]);
 
   const handleStart = (clientX, clientY) => {
     const boundingRect = ref.current.getBoundingClientRect();
     const x = clientX - boundingRect.left;
     const y = clientY - boundingRect.top;
-    setPosition({ x, y });
+
+    const newSaturation = positionToSaturation(x, y, boundingRect);
+    setSaturation(newSaturation);
     setDragging(true);
   };
 
