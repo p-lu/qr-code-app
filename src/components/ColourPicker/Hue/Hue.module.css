@@ -19,6 +19,7 @@
 }
 
 .pointer {
+  all: unset;
   position: relative;
   transform: translate(-50%, 0);
   width: 25px;
