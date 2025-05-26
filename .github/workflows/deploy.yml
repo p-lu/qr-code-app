@@ -38,6 +38,10 @@ jobs:
     name: Deploy
     needs: build
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     if: github.ref == 'refs/heads/main'
 
     steps:
@@ -48,4 +52,7 @@ jobs:
           path: ./dist
 
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: production-files
