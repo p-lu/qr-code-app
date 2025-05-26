@@ -59,7 +59,7 @@ function ControlPanel({ canvasRef }) {
             className={styles.slider}
             id="width"
             type="range"
-            min={1}
+            min={30}
             max={500}
             value={width}
             onChange={(e) => setWidth(e.target.value)}
